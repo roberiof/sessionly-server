@@ -6,10 +6,8 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNotEmptyObject,
-  IsNumber,
   IsOptional,
   IsString,
-  Min,
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
@@ -25,11 +23,6 @@ export class CreateMentorProfileDto {
   @IsArray()
   @IsString({ each: true })
   specialties: string[];
-
-  @ApiProperty({ example: 50 })
-  @IsNumber()
-  @Min(0)
-  chatPrice: number;
 }
 
 export class CreateClientProfileDto {

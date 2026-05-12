@@ -47,7 +47,7 @@ model MentorProfile {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   niche       String
   specialties String[]
-  chatPrice   Float
+  chatPrice   Float?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

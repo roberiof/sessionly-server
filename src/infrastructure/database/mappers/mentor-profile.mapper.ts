@@ -19,7 +19,7 @@ export class MentorProfileMapper extends Mapper<
       id: new UniqueEntityID(raw.userId),
       niche: raw.niche,
       specialties: raw.specialties,
-      chatPrice: raw.chatPrice,
+      chatPrice: raw.chatPrice ?? null,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
     });
@@ -41,7 +41,7 @@ export class MentorProfileMapper extends Mapper<
       user: { connect: { id: userId } },
       niche: input.niche,
       specialties: input.specialties,
-      chatPrice: input.chatPrice,
+      chatPrice: undefined,
     };
   }
 }

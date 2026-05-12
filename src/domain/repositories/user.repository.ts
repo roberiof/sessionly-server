@@ -31,7 +31,6 @@ export type UpdateUserPersistenceInput = {
 export type CreateMentorProfilePersistenceInput = {
   niche: string;
   specialties: string[];
-  chatPrice: number;
 };
 
 export type CreateClientProfilePersistenceInput = {

@@ -3,7 +3,7 @@ import { Entity, EntityMetadata } from 'src/core/entities/entity';
 export interface MentorProfileProps {
   niche: string;
   specialties: string[];
-  chatPrice: number;
+  chatPrice: number | null;
 }
 
 export class MentorProfile extends Entity<MentorProfileProps> {
@@ -15,7 +15,7 @@ export class MentorProfile extends Entity<MentorProfileProps> {
     return this.props.specialties;
   }
 
-  get chatPrice(): number {
+  get chatPrice(): number | null {
     return this.props.chatPrice;
   }
 

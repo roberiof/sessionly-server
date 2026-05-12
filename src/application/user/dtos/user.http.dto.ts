@@ -8,9 +8,6 @@ export class MentorProfilePublicDto {
 
   @ApiProperty({ type: [String] })
   specialties: string[];
-
-  @ApiProperty()
-  chatPrice: number;
 }
 
 export class ClientProfilePublicDto {

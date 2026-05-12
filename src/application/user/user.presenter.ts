@@ -31,7 +31,6 @@ export class UserPresenter {
       return {
         niche: profile.niche,
         specialties: profile.specialties,
-        chatPrice: profile.chatPrice,
       };
     }
     return { interests: profile.interests };
