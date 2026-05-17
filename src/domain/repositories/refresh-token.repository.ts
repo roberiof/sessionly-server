@@ -14,4 +14,5 @@ export interface RefreshTokenRepository {
   create(input: CreateRefreshTokenInput): Promise<{ id: string }>;
   findByTokenHash(tokenHash: string): Promise<RefreshTokenRecord | null>;
   deleteById(id: string): Promise<void>;
+  deleteAllByUserId(userId: string): Promise<void>;
 }

@@ -186,6 +186,13 @@ export class PrismaUserRepository
     };
   }
 
+  async updatePasswordById(id: string, passwordHash: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: { passwordHash },
+    });
+  }
+
   async findManyWithProfile(
     params: PaginationParams,
   ): Promise<PaginatedResult<UserWithProfile>> {

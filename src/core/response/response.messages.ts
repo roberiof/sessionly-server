@@ -2,6 +2,7 @@ export const RESPONSE = {
   AUTH: {
     LOGIN_SUCCESS: 'Signed in successfully.',
     REFRESH_SUCCESS: 'Session refreshed successfully.',
+    LOGOUT_SUCCESS: 'Logged out successfully.',
   },
   USERS: {
     CREATED_SUCCESSFULLY: 'User created successfully.',
