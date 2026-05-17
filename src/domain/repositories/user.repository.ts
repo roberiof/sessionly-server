@@ -62,6 +62,7 @@ export interface UserRepository {
   create(input: CreateUserPersistenceInput): Promise<User>;
   deleteById(id: string): Promise<void>;
   updateById(id: string, data: UpdateUserPersistenceInput): Promise<User>;
+  updatePasswordById(id: string, passwordHash: string): Promise<void>;
   createWithProfile(
     userInput: CreateUserPersistenceInput,
     profileInput: CreateProfilePersistenceInput,

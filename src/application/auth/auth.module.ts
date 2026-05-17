@@ -7,7 +7,10 @@ import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { ForgotPasswordUseCase } from './use-cases/forgot-password.use-case';
+import { LogoutUseCase } from './use-cases/logout.use-case';
 import { RefreshSessionUseCase } from './use-cases/refresh-session.use-case';
+import { ResetPasswordUseCase } from './use-cases/reset-password.use-case';
 import { SignTokensUseCase } from './use-cases/sign-tokens.use-case';
 import { ValidateUserCredentialsUseCase } from './use-cases/validate-user-credentials.use-case';
 
@@ -41,6 +44,9 @@ import { ValidateUserCredentialsUseCase } from './use-cases/validate-user-creden
     ValidateUserCredentialsUseCase,
     SignTokensUseCase,
     RefreshSessionUseCase,
+    LogoutUseCase,
+    ForgotPasswordUseCase,
+    ResetPasswordUseCase,
     LocalStrategy,
     JwtStrategy,
   ],
