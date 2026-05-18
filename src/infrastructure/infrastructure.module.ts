@@ -5,6 +5,7 @@ import {
   USERS_REPOSITORY,
 } from 'src/domain/repositories/tokens';
 import { EmailService } from './email/email.service';
+import { S3Service } from './storage/s3.service';
 import { ClientProfileMapper } from './database/mappers/client-profile.mapper';
 import { MentorProfileMapper } from './database/mappers/mentor-profile.mapper';
 import { UserMapper } from './database/mappers/user.mapper';
@@ -36,7 +37,8 @@ const REPOSITORIES = [
     MentorProfileMapper,
     ClientProfileMapper,
     EmailService,
+    S3Service,
   ],
-  exports: [...REPOSITORIES, EmailService],
+  exports: [...REPOSITORIES, EmailService, S3Service],
 })
 export class InfrastructureModule {}
