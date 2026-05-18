@@ -21,7 +21,7 @@ function makeConfigService(
 ): jest.Mocked<Pick<ConfigService, 'get'>> {
   return {
     get: jest.fn().mockImplementation((key: string) => values[key]),
-  } as unknown as jest.Mocked<Pick<ConfigService, 'get'>>;
+  };
 }
 
 describe('SignTokensUseCase', () => {

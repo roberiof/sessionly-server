@@ -8,7 +8,7 @@ import {
 import type { PasswordResetTokenRepository } from 'src/domain/repositories/password-reset-token.repository';
 import type { UserRepository } from 'src/domain/repositories/user.repository';
 
-export type ForgotPasswordInput = {
+type ForgotPasswordInput = {
   email: string;
 };
 

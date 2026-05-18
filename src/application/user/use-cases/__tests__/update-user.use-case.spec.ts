@@ -6,7 +6,6 @@ import {
   UserRole,
 } from 'src/domain/entities/user.entity';
 import type { UserRepository } from 'src/domain/repositories/user.repository';
-import { UpdateUserDto } from '../../dtos/update-user.dto';
 import { UpdateUserMeUseCase } from '../update-user-me.use-case';
 
 function makeUser(overrides?: Partial<UserProps>): User {
@@ -43,9 +42,9 @@ describe('UpdateUserMeUseCase', () => {
     it('throws BadRequestException when all fields are undefined', async () => {
       const user = makeUser();
 
-      await expect(
-        useCase.execute(user.id.toString(), {} as UpdateUserDto),
-      ).rejects.toThrow(BadRequestException);
+      await expect(useCase.execute(user.id.toString(), {})).rejects.toThrow(
+        BadRequestException,
+      );
       expect(repo.findById).not.toHaveBeenCalled();
     });
 
