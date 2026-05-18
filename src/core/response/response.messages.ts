@@ -10,5 +10,6 @@ export const RESPONSE = {
     DELETED_SUCCESSFULLY: 'User deleted successfully.',
     UPDATED_SUCCESSFULLY: 'User updated successfully.',
     PASSWORD_UPDATED_SUCCESSFULLY: 'User password updated successfully.',
+    RESTORED_SUCCESSFULLY: 'User restored successfully.',
   },
 } as const;

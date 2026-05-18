@@ -6,6 +6,7 @@ import { FetchUserMeUseCase } from './use-cases/fetch-user-me.use-case';
 import { DeleteUserMeUseCase } from './use-cases/delete-user-me.use-case';
 import { UpdateUserMeUseCase } from './use-cases/update-user-me.use-case';
 import { UpdateUserPasswordMeUseCase } from './use-cases/update-user-password-me.use-case';
+import { RestoreUserMeUseCase } from './use-cases/restore-user-me.use-case';
 
 @Module({
   imports: [InfrastructureModule],
@@ -17,6 +18,7 @@ import { UpdateUserPasswordMeUseCase } from './use-cases/update-user-password-me
     UpdateUserMeUseCase,
     DeleteUserMeUseCase,
     UpdateUserPasswordMeUseCase,
+    RestoreUserMeUseCase,
   ],
 })
 export class UserModule {}

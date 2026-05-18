@@ -63,4 +63,5 @@ export interface UserRepository {
     profileInput: CreateProfilePersistenceInput,
   ): Promise<UserWithProfile>;
   findByIdWithProfile(id: string): Promise<UserWithProfile | null>;
+  restoreUserById(id: string): Promise<UserWithProfile>;
 }

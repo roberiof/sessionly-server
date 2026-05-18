@@ -155,4 +155,17 @@ export class PrismaUserRepository
       data: { passwordHash },
     });
   }
+
+  async restoreUserById(id: string): Promise<UserWithProfile> {
+    const row = await this.prisma.user.update({
+      where: { id },
+      data: { deletedAt: null },
+      include: { mentorProfile: true, clientProfile: true },
+    });
+
+    return {
+      user: this.userMapper.toDomain(row),
+      profile: this.toProfile(row),
+    };
+  }
 }

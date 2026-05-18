@@ -17,6 +17,7 @@ import {
   ApiUsersCreateDocs,
   ApiUsersDeleteMeDocs,
   ApiUsersFetchMeDocs,
+  ApiUsersRestoreMeDocs,
   ApiUsersUpdateMeDocs,
   ApiUsersUpdatePasswordDocs,
 } from './user-http.decorator';
@@ -27,6 +28,8 @@ import { UpdateUserPasswordDto } from './dtos/update-user-password.dto';
 import { UpdateUserMeUseCase } from './use-cases/update-user-me.use-case';
 import { FetchUserMeUseCase } from './use-cases/fetch-user-me.use-case';
 import { UpdateUserPasswordMeUseCase } from './use-cases/update-user-password-me.use-case';
+import { RestoreUserMeUseCase } from './use-cases/restore-user-me.use-case';
+
 @ApiUsersController()
 @Controller('users')
 export class UserController {
@@ -36,6 +39,7 @@ export class UserController {
     private readonly deleteUserMeUseCase: DeleteUserMeUseCase,
     private readonly updateUserMeUseCase: UpdateUserMeUseCase,
     private readonly updateUserPasswordMeUseCase: UpdateUserPasswordMeUseCase,
+    private readonly restoreUserMeUseCase: RestoreUserMeUseCase,
   ) {}
 
   @Post()
@@ -108,6 +112,17 @@ export class UserController {
 
     return {
       message: RESPONSE.USERS.PASSWORD_UPDATED_SUCCESSFULLY,
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('me/restore')
+  @ApiUsersRestoreMeDocs()
+  async restoreMe(@CurrentUser() user: { userId: string }) {
+    await this.restoreUserMeUseCase.execute(user.userId);
+
+    return {
+      message: RESPONSE.USERS.RESTORED_SUCCESSFULLY,
     };
   }
 }
