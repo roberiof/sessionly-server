@@ -2,12 +2,15 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiBody,
   ApiConflictResponse,
+  ApiConsumes,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
+  ApiUnsupportedMediaTypeResponse,
 } from '@nestjs/swagger';
 import {
   CreateUserResponseDto,
@@ -119,5 +122,39 @@ export function ApiUsersRestoreMeDocs() {
       description: 'Missing or invalid access token.',
     }),
     ApiNotFoundResponse({ description: 'No pending deletion found.' }),
+  );
+}
+
+export function ApiUsersUploadAvatarDocs() {
+  return applyDecorators(
+    ApiBearerAuth('JWT'),
+    ApiOperation({
+      summary: 'Upload avatar',
+      description:
+        'Validates mime type and size, strips EXIF, stores in S3, returns { url }. Max 5 MB. Allowed: image/jpeg, image/png, image/webp.',
+    }),
+    ApiConsumes('multipart/form-data'),
+    ApiBody({
+      schema: {
+        type: 'object',
+        required: ['file'],
+        properties: { file: { type: 'string', format: 'binary' } },
+      },
+    }),
+    ApiOkResponse({
+      schema: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' },
+          data: { type: 'object', properties: { url: { type: 'string' } } },
+        },
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: 'Missing or invalid access token.',
+    }),
+    ApiUnsupportedMediaTypeResponse({
+      description: 'File type not allowed. Use JPEG, PNG, or WebP.',
+    }),
   );
 }

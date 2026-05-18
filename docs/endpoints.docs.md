@@ -43,11 +43,12 @@
 | Status | Method | Path | Auth | Purpose |
 |---|---|---|---|---|
 | ✅ | `POST` | `/users` | none | Register. Body distinguishes MENTOR vs CLIENT via discriminated payload (`mentorProfile` or `clientProfile`). Auto-logs in client side via subsequent `/auth/login`. |
-| ❌ | `GET` | `/users/me` | yes | Return the signed-in user with role-specific profile + computed `profileComplete` flag. |
-| ❌ | `PATCH` | `/users/me` | yes | Update `name`, `bio`, `avatarUrl`, `links`, `activityStatus`, role-specific profile fields. |
-| ❌ | `PATCH` | `/users/me/password` | yes | Body: `{ currentPassword, newPassword }`. Revokes all refresh tokens except the current session. |
-| ❌ | `DELETE` | `/users/me` | yes | Soft-delete with a 7-day window. Returns `{ deletionScheduledAt }`. Cancellable via `POST /users/me/restore`. |
-| ❌ | `POST` | `/users/me/restore` | yes | Cancel pending soft-delete within the 7-day window. |
+| ✅ | `GET` | `/users/me` | yes | Return the signed-in user with role-specific profile + computed `profileComplete` flag. |
+| ✅ | `PATCH` | `/users/me` | yes | Update `name`, `bio`, `avatarUrl`, `links`, `activityStatus`, role-specific profile fields. |
+| ✅ | `PATCH` | `/users/me/password` | yes | Body: `{ currentPassword, newPassword }`. Revokes all refresh tokens except the current session. |
+| ✅ | `DELETE` | `/users/me` | yes | Soft-delete with a 7-day window. Returns `{ deletionScheduledAt }`. Cancellable via `POST /users/me/restore`. |
+| ✅ | `POST` | `/users/me/restore` | yes | Cancel pending soft-delete within the 7-day window. |
+| ✅ | `POST` | `/users/me/avatar` | yes | Multipart upload. Validates mime/size, strips EXIF, stores in S3, returns `{ url }`. Max 5 MB; allowed: `image/jpeg`, `image/png`, `image/webp`. |
 
 ### `profileComplete` rule
 A mentor is `profileComplete=true` iff: `bio` set, `avatarUrl` set, `mentorProfile.specialties.length >= 1`, `mentorProfile.chatPrice > 0`, and at least one active availability slot in the next 30 days. Compute server-side; never trust client.
@@ -218,18 +219,7 @@ Two product types:
 
 ---
 
-## 12. Upload (`/uploads`)
-
-| Status | Method | Path | Auth | Purpose |
-|---|---|---|---|---|
-| ❌ | `POST` | `/uploads/avatar` | yes | Multipart or presigned-URL flow. Validates mime/size, stores in object storage, returns `{ url }`. Caller is expected to `PATCH /users/me` with the returned URL. |
-
-### Rules
-- Max 5 MB. Allowed: `image/jpeg`, `image/png`, `image/webp`. Strip EXIF.
-
----
-
-## 13. Consent (`/consent`)
+## 12. Consent (`/consent`)
 
 | Status | Method | Path | Auth | Purpose |
 |---|---|---|---|---|
@@ -238,7 +228,7 @@ Two product types:
 
 ---
 
-## 14. Data export (`/data-export`) — GDPR
+## 13. Data export (`/data-export`) — GDPR
 
 | Status | Method | Path | Auth | Purpose |
 |---|---|---|---|---|
@@ -279,7 +269,7 @@ Two product types:
 | Phase | Endpoints to ship |
 |---|---|
 | 0 | `/auth/*` extensions (refresh, logout, forgot, reset). `/users/me*`. `/consent`. |
-| 1 | `/users/me` updates incl. profile-complete computation. `/mentors`, `/mentors/:id`, `/mentors/:id/reviews`. `/uploads/avatar`. `/data-export`. |
+| 1 | `/users/me` updates incl. profile-complete computation. `/users/me/avatar` (S3 upload). `/mentors`, `/mentors/:id`, `/mentors/:id/reviews`. `/data-export`. |
 | 2 | `/availability/*`. `/bookings/*`. `/sessions/*` (cancel, reschedule, no-show, ics) — payment paths mocked. |
 | 3 | `/payments/*` + Stripe webhook. Replace mocked payment paths in booking flow. |
 | 4 | `/chats/*`, `/chats/:id/messages`. WS gateway. |

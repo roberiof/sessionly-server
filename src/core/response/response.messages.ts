@@ -11,5 +11,6 @@ export const RESPONSE = {
     UPDATED_SUCCESSFULLY: 'User updated successfully.',
     PASSWORD_UPDATED_SUCCESSFULLY: 'User password updated successfully.',
     RESTORED_SUCCESSFULLY: 'User restored successfully.',
+    AVATAR_UPLOADED_SUCCESSFULLY: 'User avatar uploaded successfully.',
   },
 } as const;

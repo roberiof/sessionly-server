@@ -5,8 +5,10 @@ import {
   Get,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import type { FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from 'src/application/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/core/decorators/current-user.decorator';
 import { RESPONSE } from 'src/core/response/response.messages';
@@ -20,6 +22,7 @@ import {
   ApiUsersRestoreMeDocs,
   ApiUsersUpdateMeDocs,
   ApiUsersUpdatePasswordDocs,
+  ApiUsersUploadAvatarDocs,
 } from './user-http.decorator';
 import { CreateUserUseCase } from './use-cases/create-user.use-case';
 import { DeleteUserMeUseCase } from './use-cases/delete-user-me.use-case';
@@ -29,6 +32,14 @@ import { UpdateUserMeUseCase } from './use-cases/update-user-me.use-case';
 import { FetchUserMeUseCase } from './use-cases/fetch-user-me.use-case';
 import { UpdateUserPasswordMeUseCase } from './use-cases/update-user-password-me.use-case';
 import { RestoreUserMeUseCase } from './use-cases/restore-user-me.use-case';
+import { UploadAvatarUseCase } from '../uploads/use-cases/upload-avatar.use-case';
+
+type MultipartRequest = FastifyRequest & {
+  file: () => Promise<{
+    mimetype: string;
+    toBuffer: () => Promise<Buffer>;
+  }>;
+};
 
 @ApiUsersController()
 @Controller('users')
@@ -40,6 +51,7 @@ export class UserController {
     private readonly updateUserMeUseCase: UpdateUserMeUseCase,
     private readonly updateUserPasswordMeUseCase: UpdateUserPasswordMeUseCase,
     private readonly restoreUserMeUseCase: RestoreUserMeUseCase,
+    private readonly uploadAvatarUseCase: UploadAvatarUseCase,
   ) {}
 
   @Post()
@@ -123,6 +135,29 @@ export class UserController {
 
     return {
       message: RESPONSE.USERS.RESTORED_SUCCESSFULLY,
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('me/avatar')
+  @ApiUsersUploadAvatarDocs()
+  async uploadAvatar(
+    @Req() req: MultipartRequest,
+    @CurrentUser() user: { userId: string },
+  ) {
+    const part = await req.file();
+    const buffer = await part.toBuffer();
+
+    const result = await this.uploadAvatarUseCase.execute({
+      userId: user.userId,
+      buffer,
+      mimetype: part.mimetype,
+      size: buffer.byteLength,
+    });
+
+    return {
+      message: RESPONSE.USERS.AVATAR_UPLOADED_SUCCESSFULLY,
+      data: { url: result.url },
     };
   }
 }
