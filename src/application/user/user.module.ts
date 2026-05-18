@@ -2,18 +2,21 @@ import { Module } from '@nestjs/common';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { UserController } from './user.controller';
 import { CreateUserUseCase } from './use-cases/create-user.use-case';
-import { FetchUsersUseCase } from './use-cases/fetch-users.use-case';
-import { DeleteUserUseCase } from './use-cases/delete-user-me.use-case';
-import { UpdateUserUseCase } from './use-cases/update-user-me.use-case';
+import { FetchUserMeUseCase } from './use-cases/fetch-user-me.use-case';
+import { DeleteUserMeUseCase } from './use-cases/delete-user-me.use-case';
+import { UpdateUserMeUseCase } from './use-cases/update-user-me.use-case';
+import { UpdateUserPasswordMeUseCase } from './use-cases/update-user-password-me.use-case';
 
 @Module({
   imports: [InfrastructureModule],
   controllers: [UserController],
   providers: [
     CreateUserUseCase,
-    FetchUsersUseCase,
-    DeleteUserUseCase,
-    UpdateUserUseCase,
+    FetchUserMeUseCase,
+    UpdateUserMeUseCase,
+    UpdateUserMeUseCase,
+    DeleteUserMeUseCase,
+    UpdateUserPasswordMeUseCase,
   ],
 })
 export class UserModule {}

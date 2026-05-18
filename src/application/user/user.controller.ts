@@ -18,21 +18,24 @@ import {
   ApiUsersDeleteMeDocs,
   ApiUsersFetchMeDocs,
   ApiUsersUpdateMeDocs,
+  ApiUsersUpdatePasswordDocs,
 } from './user-http.decorator';
 import { CreateUserUseCase } from './use-cases/create-user.use-case';
 import { DeleteUserMeUseCase } from './use-cases/delete-user-me.use-case';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { UpdateUserPasswordDto } from './dtos/update-user-password.dto';
 import { UpdateUserMeUseCase } from './use-cases/update-user-me.use-case';
 import { FetchUserMeUseCase } from './use-cases/fetch-user-me.use-case';
-
+import { UpdateUserPasswordMeUseCase } from './use-cases/update-user-password-me.use-case';
 @ApiUsersController()
 @Controller('users')
 export class UserController {
   constructor(
-    private readonly fetchUserMeUseCase: FetchUserMeUseCase,
     private readonly createUserUseCase: CreateUserUseCase,
+    private readonly fetchUserMeUseCase: FetchUserMeUseCase,
     private readonly deleteUserMeUseCase: DeleteUserMeUseCase,
     private readonly updateUserMeUseCase: UpdateUserMeUseCase,
+    private readonly updateUserPasswordMeUseCase: UpdateUserPasswordMeUseCase,
   ) {}
 
   @Post()
@@ -87,6 +90,24 @@ export class UserController {
       data: {
         user: UserPresenter.toHTTP(result),
       },
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('me/password')
+  @ApiUsersUpdatePasswordDocs()
+  async updateUserPassword(
+    @Body() body: UpdateUserPasswordDto,
+    @CurrentUser() user: { userId: string },
+  ) {
+    await this.updateUserPasswordMeUseCase.execute(
+      user.userId,
+      body.currentPassword,
+      body.newPassword,
+    );
+
+    return {
+      message: RESPONSE.USERS.PASSWORD_UPDATED_SUCCESSFULLY,
     };
   }
 }
