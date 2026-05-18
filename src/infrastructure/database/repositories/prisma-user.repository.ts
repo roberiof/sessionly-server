@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type {
-  PaginatedResult,
-  PaginationParams,
-} from 'src/core/types/pagination';
 import type { User } from 'src/domain/entities/user.entity';
 import type {
   CreateProfilePersistenceInput,
@@ -48,41 +44,11 @@ export class PrismaUserRepository
   }
 
   async findById(id: string): Promise<User | null> {
-    const result = await this.prisma.user.findUnique({
-      where: { id },
-    });
+    const result = await this.prisma.user.findUnique({ where: { id } });
 
-    if (!result) {
-      return null;
-    }
+    if (!result) return null;
 
     return this.userMapper.toDomain(result);
-  }
-
-  async findMany(params: PaginationParams): Promise<PaginatedResult<User>> {
-    const { take, skip } = this.resolvePagination(params);
-
-    const [rows, total] = await Promise.all([
-      this.prisma.user.findMany({
-        take,
-        skip,
-        where: {
-          deletedAt: null,
-        },
-      }),
-      this.prisma.user.count({
-        where: {
-          deletedAt: null,
-        },
-      }),
-    ]);
-
-    return {
-      data: rows.map((row) => this.userMapper.toDomain(row)),
-      total,
-      take,
-      skip,
-    };
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -90,9 +56,7 @@ export class PrismaUserRepository
       where: { email, deletedAt: null },
     });
 
-    if (!row) {
-      return null;
-    }
+    if (!row) return null;
 
     return this.userMapper.toDomain(row);
   }
@@ -103,27 +67,26 @@ export class PrismaUserRepository
       select: { id: true, passwordHash: true },
     });
 
-    if (!row) {
-      return null;
-    }
+    if (!row) return null;
 
     return { id: row.id, passwordHash: row.passwordHash };
   }
 
-  async create(input: CreateUserPersistenceInput): Promise<User> {
-    const created = await this.prisma.user.create({
-      data: this.userMapper.toPrismaCreateInput(input),
+  async findCredentialsById(id: string) {
+    const row = await this.prisma.user.findUnique({
+      where: { id },
+      select: { id: true, passwordHash: true },
     });
 
-    return this.userMapper.toDomain(created);
+    if (!row) return null;
+
+    return { id: row.id, passwordHash: row.passwordHash };
   }
 
   async deleteById(id: string): Promise<void> {
     await this.prisma.user.update({
       where: { id },
-      data: {
-        deletedAt: new Date(),
-      },
+      data: { deletedAt: new Date() },
     });
   }
 
@@ -186,29 +149,23 @@ export class PrismaUserRepository
     };
   }
 
-  async findManyWithProfile(
-    params: PaginationParams,
-  ): Promise<PaginatedResult<UserWithProfile>> {
-    const { take, skip } = this.resolvePagination(params);
+  async updatePasswordById(id: string, passwordHash: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: { passwordHash },
+    });
+  }
 
-    const [rows, total] = await Promise.all([
-      this.prisma.user.findMany({
-        take,
-        skip,
-        where: { deletedAt: null },
-        include: { mentorProfile: true, clientProfile: true },
-      }),
-      this.prisma.user.count({ where: { deletedAt: null } }),
-    ]);
+  async restoreUserById(id: string): Promise<UserWithProfile> {
+    const row = await this.prisma.user.update({
+      where: { id },
+      data: { deletedAt: null },
+      include: { mentorProfile: true, clientProfile: true },
+    });
 
     return {
-      data: rows.map((row) => ({
-        user: this.userMapper.toDomain(row),
-        profile: this.toProfile(row),
-      })),
-      total,
-      take,
-      skip,
+      user: this.userMapper.toDomain(row),
+      profile: this.toProfile(row),
     };
   }
 }

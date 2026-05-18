@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import {
   ActivityStatus,
   User,
@@ -10,10 +6,9 @@ import {
   UserRole,
 } from 'src/domain/entities/user.entity';
 import type { UserRepository } from 'src/domain/repositories/user.repository';
-import { DeleteUserUseCase } from '../delete-user.use-case';
+import { DeleteUserMeUseCase } from '../delete-user-me.use-case';
 
-function makeUser(overrides?: Partial<UserProps & { id: string }>): User {
-  const { id, ...props } = overrides ?? {};
+function makeUser(overrides?: Partial<UserProps>): User {
   return User.create({
     name: 'Test',
     email: 'test@example.com',
@@ -21,8 +16,7 @@ function makeUser(overrides?: Partial<UserProps & { id: string }>): User {
     activityStatus: ActivityStatus.ACTIVE,
     links: [],
     deletedAt: null,
-    ...props,
-    ...(id ? { id: { toString: () => id } as any } : {}),
+    ...overrides,
   });
 }
 
@@ -35,61 +29,30 @@ function makeRepo(): jest.Mocked<
   };
 }
 
-describe('DeleteUserUseCase', () => {
-  let useCase: DeleteUserUseCase;
+describe('DeleteUserMeUseCase', () => {
+  let useCase: DeleteUserMeUseCase;
   let repo: ReturnType<typeof makeRepo>;
 
   beforeEach(() => {
     repo = makeRepo();
-    useCase = new DeleteUserUseCase(repo as unknown as UserRepository);
+    useCase = new DeleteUserMeUseCase(repo as unknown as UserRepository);
   });
 
-  it('deletes own account without checking admin role', async () => {
+  it('deletes own account successfully', async () => {
     const user = makeUser({ deletedAt: null });
     repo.findById.mockResolvedValue(user);
 
-    await useCase.execute(user.id.toString(), user.id.toString());
+    await useCase.execute(user.id.toString());
 
     expect(repo.deleteById).toHaveBeenCalledWith(user.id.toString());
   });
 
-  it('allows ADMIN to delete another user', async () => {
-    const admin = makeUser({ role: UserRole.ADMIN });
-    const target = makeUser({ deletedAt: null });
-
-    repo.findById.mockResolvedValueOnce(admin).mockResolvedValueOnce(target);
-
-    await useCase.execute(target.id.toString(), admin.id.toString());
-
-    expect(repo.deleteById).toHaveBeenCalledWith(target.id.toString());
-  });
-
-  it('throws ForbiddenException when non-admin tries to delete another user', async () => {
-    const requester = makeUser({ role: UserRole.CLIENT });
-    repo.findById.mockResolvedValue(requester);
-
-    await expect(
-      useCase.execute('other-id', requester.id.toString()),
-    ).rejects.toThrow(ForbiddenException);
-    expect(repo.deleteById).not.toHaveBeenCalled();
-  });
-
-  it('throws ForbiddenException when requester not found', async () => {
+  it('throws NotFoundException when user not found', async () => {
     repo.findById.mockResolvedValue(null);
 
-    await expect(useCase.execute('target-id', 'requester-id')).rejects.toThrow(
-      ForbiddenException,
+    await expect(useCase.execute('missing-id')).rejects.toThrow(
+      NotFoundException,
     );
-  });
-
-  it('throws NotFoundException when target user not found (admin path)', async () => {
-    const admin = makeUser({ role: UserRole.ADMIN });
-
-    repo.findById.mockResolvedValueOnce(admin).mockResolvedValueOnce(null);
-
-    await expect(
-      useCase.execute('target-id', admin.id.toString()),
-    ).rejects.toThrow(NotFoundException);
     expect(repo.deleteById).not.toHaveBeenCalled();
   });
 
@@ -97,9 +60,9 @@ describe('DeleteUserUseCase', () => {
     const deleted = makeUser({ deletedAt: new Date() });
     repo.findById.mockResolvedValue(deleted);
 
-    await expect(
-      useCase.execute(deleted.id.toString(), deleted.id.toString()),
-    ).rejects.toThrow(BadRequestException);
+    await expect(useCase.execute(deleted.id.toString())).rejects.toThrow(
+      BadRequestException,
+    );
     expect(repo.deleteById).not.toHaveBeenCalled();
   });
 });

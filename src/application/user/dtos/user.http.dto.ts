@@ -77,3 +77,19 @@ export class CreateUserResponseDto {
   @ApiProperty({ type: CreateUserHttpDataDto })
   data: CreateUserHttpDataDto;
 }
+
+export class FetchUserMeHttpDataDto {
+  @ApiProperty({ type: UserPublicViewDto })
+  user: UserPublicViewDto;
+
+  @ApiProperty()
+  profileComplete: boolean;
+}
+
+export class FetchUserMeResponseDto {
+  @ApiProperty({ example: 'User fetched successfully.' })
+  message: string;
+
+  @ApiProperty({ type: FetchUserMeHttpDataDto })
+  data: FetchUserMeHttpDataDto;
+}

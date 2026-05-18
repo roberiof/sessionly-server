@@ -1,7 +1,3 @@
-import type {
-  PaginatedResult,
-  PaginationParams,
-} from 'src/core/types/pagination';
 import type { ClientProfile } from 'src/domain/entities/client-profile.entity';
 import type { MentorProfile } from 'src/domain/entities/mentor-profile.entity';
 import type {
@@ -56,18 +52,16 @@ export type UserCredentialsRecord = {
 
 export interface UserRepository {
   findById(id: string): Promise<User | null>;
-  findMany(params: PaginationParams): Promise<PaginatedResult<User>>;
   findByEmail(email: string): Promise<User | null>;
   findCredentialsByEmail(email: string): Promise<UserCredentialsRecord | null>;
-  create(input: CreateUserPersistenceInput): Promise<User>;
+  findCredentialsById(id: string): Promise<UserCredentialsRecord | null>;
   deleteById(id: string): Promise<void>;
   updateById(id: string, data: UpdateUserPersistenceInput): Promise<User>;
+  updatePasswordById(id: string, passwordHash: string): Promise<void>;
   createWithProfile(
     userInput: CreateUserPersistenceInput,
     profileInput: CreateProfilePersistenceInput,
   ): Promise<UserWithProfile>;
   findByIdWithProfile(id: string): Promise<UserWithProfile | null>;
-  findManyWithProfile(
-    params: PaginationParams,
-  ): Promise<PaginatedResult<UserWithProfile>>;
+  restoreUserById(id: string): Promise<UserWithProfile>;
 }

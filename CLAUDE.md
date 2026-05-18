@@ -216,9 +216,9 @@ npx prisma migrate deploy
 ## Testing
 
 ```bash
-npm test               # unit tests (jest)
-npm run test:e2e       # end-to-end
-npm run test:cov       # coverage report
+pnpm test               # unit tests (jest)
+pnpm run test:e2e       # end-to-end
+pnpm run test:cov       # coverage report
 ```
 
 - Unit test use cases in isolation. Mock repository via interface — never mock Prisma directly.
@@ -231,13 +231,13 @@ npm run test:cov       # coverage report
 ## Dev Workflow
 
 ```bash
-npm run db:up          # start postgres (docker compose)
-npm run start:dev      # watch mode
-npm run lint           # eslint --fix
-npm run format         # prettier --write
+pnpm run db:up          # start postgres (docker compose)
+pnpm run start:dev      # watch mode
+pnpm run lint           # eslint --fix
+pnpm run format         # prettier --write
 ```
 
-- Node 20+. npm (not pnpm — frontend repo uses pnpm, backend uses npm).
+- Node 20+. pnpm (both frontend and backend use pnpm).
 - `.env` is gitignored. Copy `.env.example` and fill values before running.
 - `DATABASE_URL` required at startup. App crashes fast if missing.
 

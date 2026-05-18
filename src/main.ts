@@ -41,6 +41,11 @@ async function bootstrap() {
     credentials: true,
   });
 
+  const multipart = await import('@fastify/multipart');
+  await app.register(multipart.default, {
+    limits: { fileSize: 6 * 1024 * 1024, files: 1 },
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Sessionly API')
     .setDescription('Sessionly Server REST API')
@@ -51,6 +56,7 @@ async function bootstrap() {
     )
     .addTag('auth', 'Authentication (login and session refresh)')
     .addTag('users', 'Users')
+    .addTag('uploads', 'File uploads (avatar)')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import {
   ActivityStatus,
   User,
@@ -7,7 +7,7 @@ import {
 } from 'src/domain/entities/user.entity';
 import type { UserRepository } from 'src/domain/repositories/user.repository';
 import { UpdateUserDto } from '../../dtos/update-user.dto';
-import { UpdateUserUseCase } from '../update-user.use-case';
+import { UpdateUserMeUseCase } from '../update-user-me.use-case';
 
 function makeUser(overrides?: Partial<UserProps>): User {
   return User.create({
@@ -30,67 +30,13 @@ function makeRepo(): jest.Mocked<
   };
 }
 
-describe('UpdateUserUseCase', () => {
-  let useCase: UpdateUserUseCase;
+describe('UpdateUserMeUseCase', () => {
+  let useCase: UpdateUserMeUseCase;
   let repo: ReturnType<typeof makeRepo>;
 
   beforeEach(() => {
     repo = makeRepo();
-    useCase = new UpdateUserUseCase(repo as unknown as UserRepository);
-  });
-
-  describe('authorization', () => {
-    it('allows user to update own account without admin check', async () => {
-      const user = makeUser();
-      repo.findById.mockResolvedValue(user);
-      repo.updateById.mockResolvedValue(user);
-
-      await useCase.execute(
-        user.id.toString(),
-        { name: 'New Name' },
-        user.id.toString(),
-      );
-
-      expect(repo.updateById).toHaveBeenCalledWith(user.id.toString(), {
-        name: 'New Name',
-      });
-    });
-
-    it('allows ADMIN to update another user', async () => {
-      const admin = makeUser({ role: UserRole.ADMIN });
-      const target = makeUser();
-
-      repo.findById.mockResolvedValueOnce(admin).mockResolvedValueOnce(target);
-      repo.updateById.mockResolvedValue(target);
-
-      await useCase.execute(
-        target.id.toString(),
-        { name: 'Updated' },
-        admin.id.toString(),
-      );
-
-      expect(repo.updateById).toHaveBeenCalledWith(target.id.toString(), {
-        name: 'Updated',
-      });
-    });
-
-    it('throws ForbiddenException when non-admin updates another user', async () => {
-      const requester = makeUser({ role: UserRole.CLIENT });
-      repo.findById.mockResolvedValue(requester);
-
-      await expect(
-        useCase.execute('other-id', { name: 'X' }, requester.id.toString()),
-      ).rejects.toThrow(ForbiddenException);
-      expect(repo.updateById).not.toHaveBeenCalled();
-    });
-
-    it('throws ForbiddenException when requester not found', async () => {
-      repo.findById.mockResolvedValue(null);
-
-      await expect(
-        useCase.execute('target-id', { name: 'X' }, 'requester-id'),
-      ).rejects.toThrow(ForbiddenException);
-    });
+    useCase = new UpdateUserMeUseCase(repo as unknown as UserRepository);
   });
 
   describe('validation', () => {
@@ -98,11 +44,7 @@ describe('UpdateUserUseCase', () => {
       const user = makeUser();
 
       await expect(
-        useCase.execute(
-          user.id.toString(),
-          {} as UpdateUserDto,
-          user.id.toString(),
-        ),
+        useCase.execute(user.id.toString(), {} as UpdateUserDto),
       ).rejects.toThrow(BadRequestException);
       expect(repo.findById).not.toHaveBeenCalled();
     });
@@ -111,11 +53,7 @@ describe('UpdateUserUseCase', () => {
       const user = makeUser();
 
       await expect(
-        useCase.execute(
-          user.id.toString(),
-          { name: '   ' },
-          user.id.toString(),
-        ),
+        useCase.execute(user.id.toString(), { name: '   ' }),
       ).rejects.toThrow(BadRequestException);
       expect(repo.findById).not.toHaveBeenCalled();
     });
@@ -124,18 +62,18 @@ describe('UpdateUserUseCase', () => {
       const user = makeUser();
 
       await expect(
-        useCase.execute(user.id.toString(), { links: [] }, user.id.toString()),
+        useCase.execute(user.id.toString(), { links: [] }),
       ).rejects.toThrow(BadRequestException);
       expect(repo.findById).not.toHaveBeenCalled();
     });
   });
 
   describe('update logic', () => {
-    it('throws BadRequestException when target user not found', async () => {
+    it('throws BadRequestException when user not found', async () => {
       repo.findById.mockResolvedValue(null);
 
       await expect(
-        useCase.execute('missing-id', { name: 'X' }, 'missing-id'),
+        useCase.execute('missing-id', { name: 'X' }),
       ).rejects.toThrow(BadRequestException);
     });
 
@@ -146,11 +84,9 @@ describe('UpdateUserUseCase', () => {
       repo.findById.mockResolvedValue(user);
       repo.updateById.mockResolvedValue(updated);
 
-      const result = await useCase.execute(
-        user.id.toString(),
-        { name: 'Updated' },
-        user.id.toString(),
-      );
+      const result = await useCase.execute(user.id.toString(), {
+        name: 'Updated',
+      });
 
       expect(repo.updateById).toHaveBeenCalledWith(user.id.toString(), {
         name: 'Updated',
