@@ -3,7 +3,7 @@ import { REFRESH_TOKENS_REPOSITORY } from 'src/domain/repositories/tokens';
 import type { RefreshTokenRepository } from 'src/domain/repositories/refresh-token.repository';
 import { hashRefreshToken } from '../utils/refresh-token';
 
-export type LogoutInput = {
+type LogoutInput = {
   refreshToken: string;
 };
 

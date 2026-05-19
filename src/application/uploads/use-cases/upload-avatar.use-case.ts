@@ -7,7 +7,7 @@ import { randomUUID } from 'crypto';
 import sharp from 'sharp';
 import { S3Service } from 'src/infrastructure/storage/s3.service';
 
-export type UploadAvatarInput = {
+type UploadAvatarInput = {
   userId: string;
   buffer: Buffer;
   mimetype: string;

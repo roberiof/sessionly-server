@@ -14,7 +14,7 @@ function makeRepo(
   return {
     findCredentialsByEmail: jest.fn(),
     ...overrides,
-  } as jest.Mocked<Pick<UserRepository, 'findCredentialsByEmail'>>;
+  };
 }
 
 describe('ValidateUserCredentialsUseCase', () => {
