@@ -200,6 +200,13 @@ jobs:
       PORT: 3002
       HOST: 0.0.0.0
       CORS_ORIGIN: http://localhost:3000
+      RESEND_API_KEY: ci-dummy-key
+      EMAIL_FROM: ci@example.com
+      APP_URL: http://localhost:3002
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: ci-dummy
+      AWS_SECRET_ACCESS_KEY: ci-dummy
+      AWS_S3_BUCKET: ci-dummy
     steps:
       - uses: actions/checkout@v4
 
