@@ -11,8 +11,7 @@ import type { CreateClientProfilePersistenceInput } from 'src/domain/repositorie
 @Injectable()
 export class ClientProfileMapper extends Mapper<
   ClientProfile,
-  PrismaClientProfile,
-  Prisma.ClientProfileUpdateInput
+  PrismaClientProfile
 > {
   toDomain(raw: PrismaClientProfile): ClientProfile {
     return ClientProfile.create({
@@ -23,7 +22,7 @@ export class ClientProfileMapper extends Mapper<
     });
   }
 
-  toPersistence(entity: ClientProfile): Prisma.ClientProfileUpdateInput {
+  toPrismaUpdateInput(entity: ClientProfile): Prisma.ClientProfileUpdateInput {
     return {
       interests: entity.interests,
     };

@@ -1,28 +1,15 @@
 import type { ClientProfile } from 'src/domain/entities/client-profile.entity';
 import type { MentorProfile } from 'src/domain/entities/mentor-profile.entity';
-import type {
-  ActivityStatus,
-  User,
-  UserRole,
-} from 'src/domain/entities/user.entity';
+import type { User, UserProps } from 'src/domain/entities/user.entity';
 
-export type CreateUserPersistenceInput = {
-  name: string;
-  email: string;
-  bio: string;
-  avatarUrl?: string;
-  links?: string[];
-  passwordHash: string;
-  role: UserRole;
-  activityStatus?: ActivityStatus;
-};
+export type CreateUserPersistenceInput = Pick<
+  UserProps,
+  'name' | 'email' | 'bio' | 'avatarUrl' | 'links' | 'role' | 'activityStatus'
+> & { passwordHash: string };
 
-export type UpdateUserPersistenceInput = {
-  name?: string;
-  bio?: string;
-  avatarUrl?: string;
-  links?: string[];
-};
+export type UpdateUserPersistenceInput = Partial<
+  Pick<UserProps, 'name' | 'bio' | 'avatarUrl' | 'links'>
+>;
 
 export type CreateMentorProfilePersistenceInput = {
   niche: string;
