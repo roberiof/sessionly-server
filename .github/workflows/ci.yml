@@ -177,6 +177,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quality, database]
     if: github.ref == 'refs/heads/main' || github.base_ref == 'main'
+    permissions:
+      issues: write
     services:
       postgres:
         image: postgres:16-alpine
