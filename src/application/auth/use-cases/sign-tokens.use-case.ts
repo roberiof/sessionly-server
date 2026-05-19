@@ -6,11 +6,11 @@ import { REFRESH_TOKENS_REPOSITORY } from 'src/domain/repositories/tokens';
 import type { RefreshTokenRepository } from 'src/domain/repositories/refresh-token.repository';
 import { generateRefreshToken, hashRefreshToken } from '../utils/refresh-token';
 
-export type SignTokensInput = {
+type SignTokensInput = {
   userId: string;
 };
 
-export type SignTokensResult = {
+type SignTokensResult = {
   accessToken: string;
   refreshToken: string;
 };

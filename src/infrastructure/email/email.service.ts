@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 
-export type SendPasswordResetEmailInput = {
+type SendPasswordResetEmailInput = {
   to: string;
   resetToken: string;
 };

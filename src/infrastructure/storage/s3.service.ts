@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
-export type S3UploadInput = {
+type S3UploadInput = {
   key: string;
   body: Buffer;
   contentType: string;

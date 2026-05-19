@@ -4,7 +4,7 @@ import type { RefreshTokenRepository } from 'src/domain/repositories/refresh-tok
 import { hashRefreshToken } from '../utils/refresh-token';
 import { SignTokensUseCase } from './sign-tokens.use-case';
 
-export type RefreshSessionInput = {
+type RefreshSessionInput = {
   refreshToken: string;
 };
 

@@ -3,7 +3,7 @@ import { compare } from 'bcryptjs';
 import { USERS_REPOSITORY } from 'src/domain/repositories/tokens';
 import type { UserRepository } from 'src/domain/repositories/user.repository';
 
-export type ValidateUserCredentialsInput = {
+type ValidateUserCredentialsInput = {
   email: string;
   password: string;
 };

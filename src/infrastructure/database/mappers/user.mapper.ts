@@ -1,8 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import type {
-  ActivityStatus as PrismaActivityStatus,
-  UserRole as PrismaUserRole,
-} from 'generated/prisma/enums';
 import type { Prisma, User as PrismaUser } from 'generated/prisma/client';
 import { Mapper } from 'src/core/mappers/mapper';
 import { UniqueEntityID } from 'src/core/entities/unique-entity-id';
@@ -49,7 +45,7 @@ export class UserMapper extends Mapper<
       email: user.email,
       bio: user.bio ?? null,
       avatarUrl: user.avatarUrl ?? null,
-      activityStatus: user.activityStatus as PrismaActivityStatus,
+      activityStatus: user.activityStatus,
       links: user.links,
     };
   }
@@ -63,7 +59,7 @@ export class UserMapper extends Mapper<
       passwordHash: input.passwordHash,
       avatarUrl: input.avatarUrl ?? null,
       bio: input.bio ?? null,
-      role: input.role as PrismaUserRole,
+      role: input.role,
       activityStatus: input.activityStatus,
       links: input.links,
       deletedAt: null,

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -146,6 +147,7 @@ export class UserController {
     @CurrentUser() user: { userId: string },
   ) {
     const part = await req.file();
+    if (!part) throw new BadRequestException('No file uploaded');
     const buffer = await part.toBuffer();
 
     const result = await this.uploadAvatarUseCase.execute({

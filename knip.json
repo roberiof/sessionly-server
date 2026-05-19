@@ -1,0 +1,26 @@
+{
+  "entry": [
+    "src/main.ts",
+    "src/**/*.spec.ts",
+    "test/**/*.ts",
+    "src/**/*.dto.ts",
+    "src/domain/entities/*.ts",
+    "src/core/types/*.ts",
+    "src/core/validation/*.ts",
+    "src/core/dtos/*.ts",
+    "src/core/entities/*.ts"
+  ],
+  "project": ["src/**/*.ts", "test/**/*.ts"],
+  "ignoreDependencies": [
+    "source-map-support",
+    "@prisma/client",
+    "pg",
+    "pino-pretty",
+    "@eslint/eslintrc",
+    "jest-runtime",
+    "ts-loader",
+    "@types/bcryptjs",
+    "@types/pg"
+  ],
+  "ignoreBinaries": ["wait-on"]
+}

@@ -10,7 +10,7 @@ import type { PasswordResetTokenRepository } from 'src/domain/repositories/passw
 import type { RefreshTokenRepository } from 'src/domain/repositories/refresh-token.repository';
 import type { UserRepository } from 'src/domain/repositories/user.repository';
 
-export type ResetPasswordInput = {
+type ResetPasswordInput = {
   token: string;
   newPassword: string;
 };
