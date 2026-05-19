@@ -1,4 +1,4 @@
-import { UploadAvatarUseCase } from '../upload-avatar.use-case';
+import { UploadAvatarUseCase } from '../../../user/use-cases/upload-avatar.use-case';
 
 jest.mock('sharp', () => {
   return () => ({
