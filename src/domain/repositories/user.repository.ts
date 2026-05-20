@@ -4,7 +4,7 @@ import type { User, UserProps } from 'src/domain/entities/user.entity';
 
 export type CreateUserPersistenceInput = Pick<
   UserProps,
-  'name' | 'email' | 'bio' | 'avatarUrl' | 'links' | 'role' | 'activityStatus'
+  'name' | 'email' | 'bio' | 'avatarUrl' | 'links' | 'role'
 > & { passwordHash: string };
 
 export type UpdateUserPersistenceInput = Partial<
