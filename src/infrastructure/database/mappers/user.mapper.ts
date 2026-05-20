@@ -45,7 +45,6 @@ export class UserMapper extends Mapper<User, PrismaUser> {
       avatarUrl: input.avatarUrl ?? null,
       bio: input.bio ?? null,
       role: input.role,
-      activityStatus: input.activityStatus,
       links: input.links,
       deletedAt: null,
     };
