@@ -26,10 +26,10 @@
 | Status | Method | Path | Auth | Purpose |
 |---|---|---|---|---|
 | ✅ | `POST` | `/auth/login` | none | Credentials login. Returns `{ accessToken, refreshToken, user }`. |
-| ❌ | `POST` | `/auth/refresh` | refresh token | Issue a new `accessToken` (and rotate refresh). |
-| ❌ | `POST` | `/auth/logout` | yes | Revoke current refresh token (server-side). |
-| ❌ | `POST` | `/auth/forgot-password` | none | Always returns `204` (do **not** leak whether email exists). Sends reset email if account exists. |
-| ❌ | `POST` | `/auth/reset-password` | none | Body: `{ token, newPassword }`. Validates emailed token, rotates password, invalidates other refresh tokens. |
+| ✅ | `POST` | `/auth/refresh` | refresh token | Issue a new `accessToken` (and rotate refresh). |
+| ✅ | `POST` | `/auth/logout` | yes | Revoke current refresh token (server-side). |
+| ✅ | `POST` | `/auth/forgot-password` | none | Always returns `204` (do **not** leak whether email exists). Sends reset email if account exists. |
+| ✅ | `POST` | `/auth/reset-password` | none | Body: `{ token, newPassword }`. Validates emailed token, rotates password, invalidates other refresh tokens. |
 
 ### Rules
 - Access-token expiry: 15 min. Refresh-token expiry: 30 days, rotation on every use, single-use, stored hashed.
@@ -78,10 +78,10 @@ A mentor is `profileComplete=true` iff: `bio` set, `avatarUrl` set, `mentorProfi
 
 | Status | Method | Path | Auth | Purpose |
 |---|---|---|---|---|
-| ❌ | `GET` | `/availability/me` | yes (mentor) | Recurring rules + ad-hoc slots for the signed-in mentor. |
-| ❌ | `PUT` | `/availability/rules` | yes (mentor) | Replace the recurring weekly rules. Body: `{ rules: { weekday, startTime, endTime, slotDurationMin }[] }`. |
-| ❌ | `POST` | `/availability/slots` | yes (mentor) | Create one or more ad-hoc slots (overrides). |
-| ❌ | `DELETE` | `/availability/slots/:slotId` | yes (mentor) | Delete an ad-hoc slot. Reject if a `BookingRequest` references it. |
+| ✅ | `GET` | `/availability/me` | yes (mentor) | Recurring rules + ad-hoc slots for the signed-in mentor. |
+| ✅ | `PUT` | `/availability/rules` | yes (mentor) | Replace the recurring weekly rules. Body: `{ rules: { weekday, startTime, endTime, slotDurationMin }[] }`. |
+| ✅ | `POST` | `/availability/slots` | yes (mentor) | Create one or more ad-hoc slots (overrides). |
+| ✅ | `DELETE` | `/availability/slots/:slotId` | yes (mentor) | Delete an ad-hoc slot. Reject if a `BookingRequest` references it. |
 
 ### Rules
 - Server materializes concrete slots from rules + overrides for a queried date range. Booked slots become unavailable.
