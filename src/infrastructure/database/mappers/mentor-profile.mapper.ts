@@ -11,8 +11,7 @@ import type { CreateMentorProfilePersistenceInput } from 'src/domain/repositorie
 @Injectable()
 export class MentorProfileMapper extends Mapper<
   MentorProfile,
-  PrismaMentorProfile,
-  Prisma.MentorProfileUpdateInput
+  PrismaMentorProfile
 > {
   toDomain(raw: PrismaMentorProfile): MentorProfile {
     return MentorProfile.create({
@@ -25,7 +24,7 @@ export class MentorProfileMapper extends Mapper<
     });
   }
 
-  toPersistence(entity: MentorProfile): Prisma.MentorProfileUpdateInput {
+  toPrismaUpdateInput(entity: MentorProfile): Prisma.MentorProfileUpdateInput {
     return {
       niche: entity.niche,
       specialties: entity.specialties,
