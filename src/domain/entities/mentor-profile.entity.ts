@@ -4,6 +4,7 @@ export interface MentorProfileProps {
   niche: string;
   specialties: string[];
   chatPrice: number | null;
+  hourPrice: number | null;
 }
 
 export class MentorProfile extends Entity<MentorProfileProps> {
@@ -17,6 +18,18 @@ export class MentorProfile extends Entity<MentorProfileProps> {
 
   get chatPrice(): number | null {
     return this.props.chatPrice;
+  }
+
+  get hourPrice(): number | null {
+    return this.props.hourPrice;
+  }
+
+  get isProfileComplete(): boolean {
+    return (
+      !!this.props.niche &&
+      !!this.props.hourPrice &&
+      this.props.specialties.length > 0
+    );
   }
 
   static create(

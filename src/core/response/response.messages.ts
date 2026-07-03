@@ -10,6 +10,11 @@ export const RESPONSE = {
     SLOT_DELETED_SUCCESSFULLY: 'Availability slot deleted successfully.',
     FETCHED_SUCCESSFULLY: 'Availability fetched successfully.',
   },
+  MENTORS: {
+    FETCHED_SUCCESSFULLY: 'Mentor fetched successfully.',
+    AVAILABILITY_FETCHED_SUCCESSFULLY:
+      'Mentor availability fetched successfully.',
+  },
   USERS: {
     CREATED_SUCCESSFULLY: 'User created successfully.',
     FETCHED_SUCCESSFULLY: 'User fetched successfully.',
