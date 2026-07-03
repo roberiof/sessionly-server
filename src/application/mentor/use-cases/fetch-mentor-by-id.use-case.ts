@@ -8,7 +8,7 @@ import {
   MENTOR_REPOSITORY,
 } from 'src/domain/repositories/tokens';
 
-export type FetchMentorByIdResult = MentorListItem & {
+type FetchMentorByIdResult = MentorListItem & {
   availabilityPreview: AvailabilitySlot[];
 };
 
