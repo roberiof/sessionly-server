@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import {
   AVAILABILITY_RULES_REPOSITORY,
   AVAILABILITY_SLOT_REPOSITORY,
+  MENTOR_REPOSITORY,
   PASSWORD_RESET_TOKENS_REPOSITORY,
   REFRESH_TOKENS_REPOSITORY,
   USERS_REPOSITORY,
@@ -19,6 +20,7 @@ import { PrismaAvailabilitySlotRepository } from './database/repositories/prisma
 import { PrismaPasswordResetTokenRepository } from './database/repositories/prisma-password-reset-token.repository';
 import { PrismaRefreshTokenRepository } from './database/repositories/prisma-refresh-token.repository';
 import { PrismaUserRepository } from './database/repositories/prisma-user.repository';
+import { PrismaMentorRepository } from './database/repositories/prisma-mentor.repository';
 
 const REPOSITORIES = [
   {
@@ -40,6 +42,10 @@ const REPOSITORIES = [
   {
     provide: AVAILABILITY_RULES_REPOSITORY,
     useClass: PrismaAvailabilityRulesRepository,
+  },
+  {
+    provide: MENTOR_REPOSITORY,
+    useClass: PrismaMentorRepository,
   },
 ];
 

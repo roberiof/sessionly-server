@@ -19,6 +19,7 @@ export class MentorProfileMapper extends Mapper<
       niche: raw.niche,
       specialties: raw.specialties,
       chatPrice: raw.chatPrice ?? null,
+      hourPrice: raw.hourPrice ?? null,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
     });
@@ -29,6 +30,7 @@ export class MentorProfileMapper extends Mapper<
       niche: entity.niche,
       specialties: entity.specialties,
       chatPrice: entity.chatPrice,
+      hourPrice: entity.hourPrice,
     };
   }
 
@@ -41,6 +43,7 @@ export class MentorProfileMapper extends Mapper<
       niche: input.niche,
       specialties: input.specialties,
       chatPrice: undefined,
+      hourPrice: undefined,
     };
   }
 }

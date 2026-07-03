@@ -49,6 +49,7 @@ model MentorProfile {
   niche              String
   specialties        String[]
   chatPrice          Float?
+  hourPrice          Float?
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   availabilityRules  AvailabilityRules?
