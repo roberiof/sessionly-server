@@ -11,8 +11,7 @@ import type { CreateMentorProfilePersistenceInput } from 'src/domain/repositorie
 @Injectable()
 export class MentorProfileMapper extends Mapper<
   MentorProfile,
-  PrismaMentorProfile,
-  Prisma.MentorProfileUpdateInput
+  PrismaMentorProfile
 > {
   toDomain(raw: PrismaMentorProfile): MentorProfile {
     return MentorProfile.create({
@@ -20,16 +19,18 @@ export class MentorProfileMapper extends Mapper<
       niche: raw.niche,
       specialties: raw.specialties,
       chatPrice: raw.chatPrice ?? null,
+      hourPrice: raw.hourPrice ?? null,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
     });
   }
 
-  toPersistence(entity: MentorProfile): Prisma.MentorProfileUpdateInput {
+  toPrismaUpdateInput(entity: MentorProfile): Prisma.MentorProfileUpdateInput {
     return {
       niche: entity.niche,
       specialties: entity.specialties,
       chatPrice: entity.chatPrice,
+      hourPrice: entity.hourPrice,
     };
   }
 
@@ -42,6 +43,7 @@ export class MentorProfileMapper extends Mapper<
       niche: input.niche,
       specialties: input.specialties,
       chatPrice: undefined,
+      hourPrice: undefined,
     };
   }
 }

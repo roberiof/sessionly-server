@@ -14,11 +14,7 @@ import type {
 } from 'src/domain/repositories/user.repository';
 
 @Injectable()
-export class UserMapper extends Mapper<
-  User,
-  PrismaUser,
-  Prisma.UserUpdateInput
-> {
+export class UserMapper extends Mapper<User, PrismaUser> {
   toDomain(raw: PrismaUser): User {
     const props: UserProps = {
       name: raw.name,
@@ -39,17 +35,6 @@ export class UserMapper extends Mapper<
     });
   }
 
-  toPersistence(user: User): Prisma.UserUpdateInput {
-    return {
-      name: user.name,
-      email: user.email,
-      bio: user.bio ?? null,
-      avatarUrl: user.avatarUrl ?? null,
-      activityStatus: user.activityStatus,
-      links: user.links,
-    };
-  }
-
   toPrismaCreateInput(
     input: CreateUserPersistenceInput,
   ): Prisma.UserCreateInput {
@@ -60,7 +45,6 @@ export class UserMapper extends Mapper<
       avatarUrl: input.avatarUrl ?? null,
       bio: input.bio ?? null,
       role: input.role,
-      activityStatus: input.activityStatus,
       links: input.links,
       deletedAt: null,
     };

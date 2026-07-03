@@ -44,13 +44,16 @@ model RefreshToken {
 }
 
 model MentorProfile {
-  userId      String   @id
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  niche       String
-  specialties String[]
-  chatPrice   Float?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  userId             String               @id
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  niche              String
+  specialties        String[]
+  chatPrice          Float?
+  hourPrice          Float?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  availabilityRules  AvailabilityRules?
+  availabilitySlots  AvailabilitySlot[]
 }
 
 model ClientProfile {
@@ -82,4 +85,36 @@ enum UserRole {
   MENTOR
   CLIENT
   ADMIN
+}
+
+model AvailabilityRules {
+  id        String        @id @default(uuid())
+  mentorId  String        @unique
+  mentor    MentorProfile @relation(fields: [mentorId], references: [userId], onDelete: Cascade)
+  days      Json
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  slots     AvailabilitySlot[]
+}
+
+model AvailabilitySlot {
+  id        String               @id @default(uuid())
+  mentorId  String
+  mentor    MentorProfile        @relation(fields: [mentorId], references: [userId], onDelete: Cascade)
+  ruleId    String?
+  rule      AvailabilityRules?   @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  startTime DateTime
+  endTime   DateTime
+  type      AvailabilitySlotType
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  @@index([mentorId])
+  @@index([ruleId])
+}
+
+enum AvailabilitySlotType {
+  BLOCK
+  ADD
 }

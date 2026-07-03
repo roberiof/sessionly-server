@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import type { SignOptions } from 'jsonwebtoken';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { AuthController } from './auth.controller';
+import { RolesGuard } from './guards/roles.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { ForgotPasswordUseCase } from './use-cases/forgot-password.use-case';
@@ -49,6 +50,8 @@ import { ValidateUserCredentialsUseCase } from './use-cases/validate-user-creden
     ResetPasswordUseCase,
     LocalStrategy,
     JwtStrategy,
+    RolesGuard,
   ],
+  exports: [RolesGuard],
 })
 export class AuthModule {}
